@@ -1,0 +1,19 @@
+gem "buildr", "~>1.3"
+
+load File.dirname(__FILE__) + '/../../tasks/bnd.rake'
+
+repositories.remote << 'https://repository.apache.org/content/repositories/releases'
+
+OSGI_CORE = 'org.apache.felix:org.osgi.core:jar:1.4.0'
+
+puts "Example build file that has a simple activator"
+
+desc 'Hello World bundle'
+define 'helloworld' do
+  project.version = '1.0'
+  project.group = 'iris'
+  bnd['Export-Package'] = "*;version=#{version}"
+  bnd['Bundle-Activator'] = "iris.helloworld.Activator"
+  package :bundle
+  compile.with OSGI_CORE
+end
