@@ -1,7 +1,3 @@
-# Provides tasks to use bnd with buildr.  Of particular interest is 
-# bnd:wrap, which implements automatic bundling of buildr-packaged jars
-# if enabled for a project.
-
 module Bnd
   REQUIRES = ["biz.aQute:bnd:jar:0.0.384"]
 
