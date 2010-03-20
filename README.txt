@@ -19,6 +19,32 @@ end
 
 For actual examples, look in the examples dir.
 
+How-To
+------
+
+The easiest way to use the extension is download and install it locally inside
+the project that you intend to use it in. Piston (http://piston.rubyforge.org/)
+is the tool I tend to use to manage vendor branches of code.
+
+To install piston use "gem install piston". Then create a directory to contain
+vendor branches. By convention I use "vendor/buildr" as the base directory for
+buildr extensions. Then import this extension via a command such as;
+
+$ piston import git://github.com/rockninja/buildr-bnd.git vendor/buildr/buildr-bnd
+
+The files patched and modified locally and committed into the local source
+control system but if you ever need to update to the latest version of this
+extension use;
+
+$ piston update vendor/buildr/buildr-bnd
+
+The one final modification is needed to the Buildr buildfile to tell it to load the
+extension. To do this I typically have the following snippet in the build file;
+
+Dir["#{File.dirname(__FILE__)}/vendor/buildr/*/tasks/*.rake"].each do |file|
+  load file
+end
+
 Credits
 -------
 
