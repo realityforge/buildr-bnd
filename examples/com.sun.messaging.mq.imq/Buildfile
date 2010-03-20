@@ -1,0 +1,19 @@
+gem "buildr", "~>1.3"
+
+load File.dirname(__FILE__) + '/../../tasks/bnd.rake'
+
+repositories.remote << 'http://download.java.net/maven/2' # OpenMQ
+
+IMQ = 'com.sun.messaging.mq:imq:jar:4.4'
+
+puts "Example build file that wraps a non osgi jar"
+
+desc 'OSGi bundle for OpenMQ provider client library'
+define 'com.sun.messaging.mq.imq' do
+  project.version = '4.4'
+  project.group = 'iris'
+  bnd['Import-Package'] = "*;resolution:=optional"
+  bnd['Export-Package'] = "com.sun.messaging.*;version=#{version}"
+  package :bundle
+  compile.with IMQ
+end
