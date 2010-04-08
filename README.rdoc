@@ -24,3 +24,7 @@ For actual examples, look in the examples dir.
 * Document that manifest is merged in
 * Document settings are inherited from parent projects
 * Test all of the above
+* Add embed that adds a dependency on artifact/project and adds it to classpath list. i.e.
+
+  bnd.embed project("foo")
+  bnd.embed 'group:id:jar:1.0' 
