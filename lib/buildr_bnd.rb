@@ -4,6 +4,15 @@ module Realityforge
 
     include Buildr::Extension
 
+    class << self
+
+      def bnd_main(*args)
+        cp = Buildr.artifacts(REQUIRES).each(&:invoke).map(&:to_s).join(File::PATH_SEPARATOR)
+        Java::Commands.java 'aQute.bnd.main.bnd', *(args + [{ :classpath => cp }])
+      end
+
+    end
+
     def package_as_bundle(filename)
       dirname = File.dirname(filename)
       # Generate BND file with same name as target jar but different extension
@@ -21,13 +30,13 @@ module Realityforge
       end
 
       project.task('bnd:print' => [filename]) do |task|
-        bnd_main( filename )
+        Bnd.bnd_main( filename )
       end
 
       # the last task is the task considered the packaging task
       project.file( filename => [bnd_filename] ) do |task|
-        bnd_main( "build", "-noeclipse", bnd_filename )
-        bnd_main( "print", "-verify", filename )
+        Bnd.bnd_main( "build", "-noeclipse", bnd_filename )
+        Bnd.bnd_main( "print", "-verify", filename )
       end
     end
 
@@ -54,11 +63,6 @@ module Realityforge
       project.bnd['Bundle-Version'] ||= project.version
       project.bnd['Import-Package'] ||= '*'
       project.bnd['Export-Package'] ||= '*'
-    end
-
-    def bnd_main(*args)
-      cp = Buildr.artifacts(REQUIRES).each(&:invoke).map(&:to_s).join(File::PATH_SEPARATOR)
-      Java::Commands.java 'aQute.bnd.main.bnd', *(args + [{ :classpath => cp }])
     end
 
     def bnd
