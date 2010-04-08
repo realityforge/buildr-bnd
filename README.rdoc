@@ -17,3 +17,10 @@ A typical project that uses the extension may look something like;
   end
 
 For actual examples, look in the examples dir.
+
+== TODO
+
+* Document each default value
+* Document that manifest is merged in
+* Document settings are inherited from parent projects
+* Test all of the above
