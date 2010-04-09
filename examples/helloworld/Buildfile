@@ -1,4 +1,4 @@
-load File.dirname(__FILE__) + '/../../tasks/bnd.rake'
+load File.dirname(__FILE__) + '/../../lib/buildr_bnd.rb'
 
 repositories.remote << 'https://repository.apache.org/content/repositories/releases'
 

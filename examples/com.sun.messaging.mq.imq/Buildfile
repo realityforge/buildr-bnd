@@ -1,4 +1,4 @@
-load File.dirname(__FILE__) + '/../../tasks/bnd.rake'
+load File.dirname(__FILE__) + '/../../lib/buildr_bnd.rb'
 
 repositories.remote << 'http://download.java.net/maven/2' # OpenMQ
 
