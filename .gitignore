@@ -1,3 +1,5 @@
 /examples/com.sun.messaging.mq.imq/target
 /examples/helloworld/target/
 /*.iml
+/pkg
+/rdoc
