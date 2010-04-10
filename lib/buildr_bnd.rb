@@ -1,13 +1,21 @@
 module Buildr
   module Bnd
-    REQUIRES = ["biz.aQute:bnd:jar:0.0.384"]
-
     include Buildr::Extension
 
     class << self
 
+      # The specs for requirements
+      def requires
+        ["biz.aQute:bnd:jar:0.0.384"]
+      end
+
+      # Repositories containing the requirements
+      def remote_repositories
+        ["biz.aQute:bnd:jar:0.0.384"]
+      end
+
       def bnd_main(*args)
-        cp = Buildr.artifacts(REQUIRES).each(&:invoke).map(&:to_s).join(File::PATH_SEPARATOR)
+        cp = Buildr.artifacts(self.requires).each(&:invoke).map(&:to_s).join(File::PATH_SEPARATOR)
         Java::Commands.java 'aQute.bnd.main.bnd', *(args + [{ :classpath => cp }])
       end
 
@@ -36,7 +44,11 @@ module Buildr
       # the last task is the task considered the packaging task
       project.file( filename => [bnd_filename] ) do |task|
         Bnd.bnd_main( "build", "-noeclipse", bnd_filename )
-        Bnd.bnd_main( "print", "-verify", filename )
+        begin
+          Bnd.bnd_main( "print", "-verify", filename )
+        rescue
+          rm filename  
+        end
       end
     end
 
