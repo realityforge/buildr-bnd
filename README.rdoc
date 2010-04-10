@@ -16,15 +16,60 @@ A typical project that uses the extension may look something like;
     ...
   end
 
-For actual examples, look in the examples dir.
+== Examples
+
+=== Using bnd to wrap an existing jar
+
+Bnd can be used to wrap an existing jar as an OSGi bundle. The following
+example wraps the OpenMQ JMS provider as an OSGi bundle.
+
+  require 'buildr_bnd'
+
+  # Add repository for OpenMQ
+  repositories.remote << 'http://download.java.net/maven/2'
+
+  desc 'OSGi bundle for OpenMQ JMS provider client library'
+  define 'com.sun.messaging.mq.imq' do
+    project.version = '4.4'
+    project.group = 'iris'
+    bnd['Import-Package'] = "*;resolution:=optional"
+    bnd['Export-Package'] = "com.sun.messaging.*;version=#{version}"
+    compile.with 'com.sun.messaging.mq:imq:jar:4.4'
+    package :bundle
+  end
+
+=== Create an OSGi bundle with an Activator
+
+The following example presents a basic buildfile for building an OSGi bundle with
+an activator.
+
+  require 'buildr_bnd'
+
+  # repository for OSGi core bundle
+  repositories.remote << 'https://repository.apache.org/content/repositories/releases'
+
+  desc 'Hello World bundle'
+  define 'helloworld' do
+    project.version = '1.0'
+    project.group = 'org.example'
+    bnd['Export-Package'] = "org.example.helloworld.api.*;version=#{version}"
+    bnd['Bundle-Activator'] = "org.example.helloworld.Activator"
+
+    compile.with 'org.apache.felix:org.osgi.core:jar:1.4.0'
+    package :bundle
+  end
 
 == TODO
 
 * Document each default value
-* Document that manifest is merged in
-* Document settings are inherited from parent projects
+* Document that manifest is merged in, manifest is where do inheritable values
 * Test all of the above
 * Add embed that adds a dependency on artifact/project and adds it to classpath list. i.e.
 
   bnd.embed project("foo")
-  bnd.embed 'group:id:jar:1.0' 
+  bnd.embed 'group:id:jar:1.0'
+
+== Credit
+
+The plugin was heavily inspired by the bnd tasks at https://ncisvn.nci.nih.gov/svn/psc/trunk/tasks/bnd.rake
+originally authored by Rhett Sutphin. It began life as a fork but has been rewritten to use a different approach.
