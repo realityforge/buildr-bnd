@@ -120,7 +120,7 @@ SRC
 
     it "raise notp produce an invalid jar file" do
       lambda { task('package').invoke }.should raise_error
-      File.should_bot be_exist(@foo._("target/foo-2.1.3.jar"))
+      File.should_not be_exist(@foo._("target/foo-2.1.3.jar"))
     end
   end
 end
