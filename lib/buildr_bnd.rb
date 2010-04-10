@@ -11,7 +11,7 @@ module Buildr
 
       # Repositories containing the requirements
       def remote_repositories
-        ["biz.aQute:bnd:jar:0.0.384"]
+        ["http://www.aQute.biz/repo"]
       end
 
       def bnd_main(*args)
@@ -46,8 +46,9 @@ module Buildr
         Bnd.bnd_main( "build", "-noeclipse", bnd_filename )
         begin
           Bnd.bnd_main( "print", "-verify", filename )
-        rescue
-          rm filename  
+        rescue => e
+          rm filename
+          raise e
         end
       end
     end
