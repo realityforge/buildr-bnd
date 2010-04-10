@@ -1,4 +1,4 @@
-module Realityforge
+module Buildr
   module Bnd
     REQUIRES = ["biz.aQute:bnd:jar:0.0.384"]
 
@@ -77,5 +77,5 @@ module Realityforge
 end
 
 class Buildr::Project
-  include Realityforge::Bnd
+  include Buildr::Bnd
 end
