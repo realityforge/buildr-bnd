@@ -1,7 +1,7 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
 describe "package :bundle" do
-  describe "with valid bundle" do
+  describe "with a valid bundle" do
     before do
       write "src/main/java/com/biz/Foo.java", <<SRC
 package com.biz;
@@ -76,7 +76,7 @@ SRC
       open_main_manifest_section('bar/target/foo-bar-2.2.jar') do |attribs|
         attribs['Bundle-Name'].should eql('foo:bar')
         attribs['Bundle-Version'].should eql('2.2')
-        attribs['Bundle-SymbolicName'].should eql('mygroup.foo-bar')
+        attribs['Bundle-SymbolicName'].should eql('mygroup.foo.bar')
         attribs['Export-Package'].should eql('com.biz.bar')
         attribs['Import-Package'].should eql('com.biz.bar')
       end
