@@ -22,7 +22,7 @@ module Buildr
 
       # Add Buildr.application.buildfile so it will rebuild if we change settings
       project.file(bnd_filename => [Buildr.application.buildfile, dirname]) do |task|
-        params = project.bnd.merge(project.manifest).reject { |k, v| v.nil? || v.empty? }
+        params = project.bnd.merge(project.manifest).reject { |k, v| v.nil? }
         params["-output"] = filename
         File.open(task.name, 'w') do |f|
           f.print params.collect { |k, v| "#{k}=#{v}" }.join("\n")
