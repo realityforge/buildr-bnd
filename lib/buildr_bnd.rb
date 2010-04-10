@@ -50,12 +50,6 @@ module Realityforge
       Project.local_task("bnd:print")
     end
 
-    before_define do |project|
-      if project.parent
-        project.bnd.merge(project.parent.bnd)
-      end
-    end
-
     after_define do |project|
       project.bnd.classpath ||= ([project.compile.target] + project.compile.dependencies).collect(&:to_s).join(", ")
       project.bnd['Bundle-SymbolicName'] ||= [project.group, project.id].join('.')
