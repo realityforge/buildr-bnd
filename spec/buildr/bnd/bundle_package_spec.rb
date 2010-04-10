@@ -20,7 +20,7 @@ SRC
 
         define "bar" do
           project.version = "2.2"
-          manifest["Magic-Food"] = "Cheese"
+          bnd["Magic-Food"] = "Cheese"
           package :bundle
         end
       end
