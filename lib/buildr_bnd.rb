@@ -65,7 +65,7 @@ module Buildr
 
     after_define do |project|
       project.bnd.classpath ||= ([project.compile.target] + project.compile.dependencies).collect(&:to_s).join(", ")
-      project.bnd['Bundle-SymbolicName'] ||= [project.group, project.name].join('.')
+      project.bnd['Bundle-SymbolicName'] ||= [project.group, project.name.gsub(':','.')].join('.')
       project.bnd['Bundle-Name'] ||= project.comment || project.name
       project.bnd['Bundle-Description'] ||= project.comment
       project.bnd['Bundle-Version'] ||= project.version

@@ -22,7 +22,7 @@ describe "project.bnd defaults" do
 
   it "defaults Bundle-SymbolicName to combination of group and name" do
     @foo.bnd['Bundle-SymbolicName'].should eql('mygroup.foo')
-    @bar.bnd['Bundle-SymbolicName'].should eql('mygroup.foo:bar')
+    @bar.bnd['Bundle-SymbolicName'].should eql('mygroup.foo.bar')
   end
 
   it "defaults Export-Package to *" do
