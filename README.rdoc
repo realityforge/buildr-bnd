@@ -63,7 +63,6 @@ an activator.
 
 * Document each default value
 * Document that manifest is merged in, manifest is where do inheritable values
-* Test all of the above
 * Add embed that adds a dependency on artifact/project and adds it to classpath list. i.e.
 
   bnd.embed project("foo")
