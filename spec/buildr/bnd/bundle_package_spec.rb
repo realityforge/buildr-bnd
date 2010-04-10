@@ -103,4 +103,24 @@ SRC
       yield Buildr::Packaging::Java::Manifest.from_zip(jar_filename).main
     end
   end
+
+  describe "with an invalid bundle" do
+    before do
+      # bundle invalid as no source
+      @foo = define "foo" do
+        project.version = "2.1.3"
+        project.group = "mygroup"
+        package :bundle
+      end
+    end
+
+    it "raise an error if unable to build a valid bundle" do
+      lambda { task('package').invoke }.should raise_error
+    end
+
+    it "raise notp produce an invalid jar file" do
+      lambda { task('package').invoke }.should raise_error
+      File.should_bot be_exist(@foo._("target/foo-2.1.3.jar"))
+    end
+  end
 end
