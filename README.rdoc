@@ -126,6 +126,8 @@ parameter withy a local value.
 
 == Future Work
 
+=== Dependencies
+
 Currently you need to declare all dependencies required by bnd as a compile dependency via
 "compile.with X" even if they are not compile time dependencies but are just included in the
 bundle otherwise these resources may not be uptodate when the bnd tool is invoked. An option
@@ -140,6 +142,18 @@ for improving this situation is something like the following code;
 
     project 'bar' do
       ...
+    end
+  end
+
+=== Syntax
+
+Consider changing the syntax so that the bnd settings are not against the project but against
+the packaging task. i.e.
+
+  define 'foo' do
+    package(:bundle).tap do |bnd|
+      bnd['Import-Package'] = "*;resolution:=optional"
+      bnd['Export-Package'] = "com.sun.messaging.*;version=#{version}"
     end
   end
 
