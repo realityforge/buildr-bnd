@@ -15,9 +15,10 @@ A typical project that uses the extension may look something like;
 
   define 'myProject' do
     ...
-    bnd['Import-Package'] = "*;resolution:=optional"
-    bnd['Export-Package'] = "*;version=#{version}"
-    package :bundle
+    package(:bundle).tap do |bnd|
+      bnd['Import-Package'] = "*;resolution:=optional"
+      bnd['Export-Package'] = "*;version=#{version}"
+    end
     ...
   end
 
@@ -68,10 +69,11 @@ example wraps the OpenMQ JMS provider as an OSGi bundle.
   define 'com.sun.messaging.mq.imq' do
     project.version = '4.4'
     project.group = 'iris'
-    bnd['Import-Package'] = "*;resolution:=optional"
-    bnd['Export-Package'] = "com.sun.messaging.*;version=#{version}"
     compile.with 'com.sun.messaging.mq:imq:jar:4.4'
-    package :bundle
+    package(:bundle).tap do |bnd|
+      bnd['Import-Package'] = "*;resolution:=optional"
+      bnd['Export-Package'] = "com.sun.messaging.*;version=#{version}"
+    end
   end
 
 === Create an OSGi bundle with an Activator
@@ -88,11 +90,11 @@ an activator.
   define 'helloworld' do
     project.version = '1.0'
     project.group = 'org.example'
-    bnd['Export-Package'] = "org.example.helloworld.api.*;version=#{version}"
-    bnd['Bundle-Activator'] = "org.example.helloworld.Activator"
-
     compile.with 'org.apache.felix:org.osgi.core:jar:1.4.0'
-    package :bundle
+    package(:bundle).tap do |bnd|
+      bnd['Export-Package'] = "org.example.helloworld.api.*;version=#{version}"
+      bnd['Bundle-Activator'] = "org.example.helloworld.Activator"
+    end
   end
 
 === Inheriting parameters for bnd tool
@@ -118,9 +120,10 @@ parameter withy a local value.
     end
 
     define 'fo' do
-      bnd['Bundle-License'] = "http://www.apache.org/licenses/LICENSE-1.1"
       ...
-      package :bundle
+      package(:bundle).tap do |bnd|
+        bnd['Bundle-License'] = "http://www.apache.org/licenses/LICENSE-1.1"
+      end
     end
   end
 
@@ -142,18 +145,6 @@ for improving this situation is something like the following code;
 
     project 'bar' do
       ...
-    end
-  end
-
-=== Syntax
-
-Consider changing the syntax so that the bnd settings are not against the project but against
-the packaging task. i.e.
-
-  define 'foo' do
-    package(:bundle).tap do |bnd|
-      bnd['Import-Package'] = "*;resolution:=optional"
-      bnd['Export-Package'] = "com.sun.messaging.*;version=#{version}"
     end
   end
 

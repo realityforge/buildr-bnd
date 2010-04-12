@@ -20,8 +20,9 @@ SRC
 
         define "bar" do
           project.version = "2.2"
-          bnd["Magic-Food"] = "Cheese"
-          package :bundle
+          package(:bundle).tap do |bnd|
+            bnd["Magic-Food"] = "Cheese"
+          end
         end
       end
       task('package').invoke

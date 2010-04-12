@@ -24,15 +24,38 @@ module Buildr
     class BundleTask < Rake::FileTask
       attr_accessor :project
 
+      def [](key)
+        @params[key]
+      end
+
+      def []=(key, value)
+        @params[key] = value
+      end
+
+      def to_params
+        params = project.manifest.merge(@params).reject { |k, v| v.nil? }
+        params["-classpath"] ||= ([project.compile.target] + project.compile.dependencies).collect(&:to_s).join(", ")
+        params['Bundle-SymbolicName'] ||= [project.group, project.name.gsub(':', '.')].join('.')
+        params['Bundle-Name'] ||= project.comment || project.name
+        params['Bundle-Description'] ||= project.comment
+        params['Bundle-Version'] ||= project.version
+        params['Import-Package'] ||= '*'
+        params['Export-Package'] ||= '*'
+
+        params
+      end
+
       protected
+
       def initialize(*args) #:nodoc:
         super
+        @params = {}
         enhance do
           filename = self.name
           # Generate BND file with same name as target jar but different extension
           bnd_filename = filename.sub /(\.jar)?$/, '.bnd'
 
-          params = project.bnd.to_params
+          params = self.to_params
           params["-output"] = filename
           File.open(bnd_filename, 'w') do |f|
             f.print params.collect { |k, v| "#{k}=#{v}" }.join("\n")
@@ -72,29 +95,6 @@ module Buildr
     first_time do
       desc "Does `bnd print` on the packaged bundle and stdouts the output for inspection"
       Project.local_task("bnd:print")
-    end
-
-    def bnd
-      @bnd ||= BndParameters.new( self )
-    end
-
-    class BndParameters < Hash
-      def initialize(project)
-        @project = project
-      end
-
-      def to_params
-        params = @project.manifest.merge(self).reject { |k, v| v.nil? }
-        params["-classpath"] ||= ([@project.compile.target] + @project.compile.dependencies).collect(&:to_s).join(", ")
-        params['Bundle-SymbolicName'] ||= [@project.group, @project.name.gsub(':', '.')].join('.')
-        params['Bundle-Name'] ||= @project.comment || @project.name
-        params['Bundle-Description'] ||= @project.comment
-        params['Bundle-Version'] ||= @project.version
-        params['Import-Package'] ||= '*'
-        params['Export-Package'] ||= '*'
-
-        params
-      end
     end
   end
 end
