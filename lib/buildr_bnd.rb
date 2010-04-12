@@ -51,7 +51,7 @@ module Buildr
 
     def package_as_bundle(filename)
       project.task('bnd:print' => [filename]) do |task|
-        Bnd.bnd_main( filename )
+        Bnd.bnd_main( "print", filename )
       end
 
       dirname = File.dirname(filename)
