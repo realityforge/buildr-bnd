@@ -23,26 +23,25 @@ module Buildr
 
     def package_as_bundle(filename)
       dirname = File.dirname(filename)
-      # Generate BND file with same name as target jar but different extension
-      bnd_filename = filename.sub /(\.jar)?$/, '.bnd'
-
       directory( dirname )
-
-      # Add Buildr.application.buildfile so it will rebuild if we change settings
-      project.file(bnd_filename => [Buildr.application.buildfile, dirname]) do |task|
-        params = project.bnd.to_params
-        params["-output"] = filename
-        File.open(task.name, 'w') do |f|
-          f.print params.collect { |k, v| "#{k}=#{v}" }.join("\n")
-        end
-      end
 
       project.task('bnd:print' => [filename]) do |task|
         Bnd.bnd_main( filename )
       end
 
       # the last task is the task considered the packaging task
-      project.file( filename => [bnd_filename] ) do |task|
+      # Add Buildr.application.buildfile so it will rebuild if we change settings
+      project.file( filename => [Buildr.application.buildfile, dirname] ) do |task|
+
+        # Generate BND file with same name as target jar but different extension
+        bnd_filename = filename.sub /(\.jar)?$/, '.bnd'
+
+        params = project.bnd.to_params
+        params["-output"] = filename
+        File.open(bnd_filename, 'w') do |f|
+          f.print params.collect { |k, v| "#{k}=#{v}" }.join("\n")
+        end
+
         Bnd.bnd_main( "build", "-noeclipse", bnd_filename )
         begin
           Bnd.bnd_main( "print", "-verify", filename )
