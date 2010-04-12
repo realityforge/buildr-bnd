@@ -21,35 +21,47 @@ module Buildr
 
     end
 
-    def package_as_bundle(filename)
-      dirname = File.dirname(filename)
-      directory( dirname )
+    class BundleTask < Rake::FileTask
+      attr_accessor :project
 
+      protected
+      def initialize(*args) #:nodoc:
+        super
+        enhance do
+          filename = self.name
+          # Generate BND file with same name as target jar but different extension
+          bnd_filename = filename.sub /(\.jar)?$/, '.bnd'
+
+          params = project.bnd.to_params
+          params["-output"] = filename
+          File.open(bnd_filename, 'w') do |f|
+            f.print params.collect { |k, v| "#{k}=#{v}" }.join("\n")
+          end
+
+          Bnd.bnd_main( "build", "-noeclipse", bnd_filename )
+          begin
+            Bnd.bnd_main( "print", "-verify", filename )
+          rescue => e
+            rm filename
+            raise e
+          end
+        end
+      end
+    end
+
+    def package_as_bundle(filename)
       project.task('bnd:print' => [filename]) do |task|
         Bnd.bnd_main( filename )
       end
 
-      # the last task is the task considered the packaging task
+      dirname = File.dirname(filename)
+      directory( dirname )
+
       # Add Buildr.application.buildfile so it will rebuild if we change settings
-      project.file( filename => [Buildr.application.buildfile, dirname] ) do |task|
-
-        # Generate BND file with same name as target jar but different extension
-        bnd_filename = filename.sub /(\.jar)?$/, '.bnd'
-
-        params = project.bnd.to_params
-        params["-output"] = filename
-        File.open(bnd_filename, 'w') do |f|
-          f.print params.collect { |k, v| "#{k}=#{v}" }.join("\n")
-        end
-
-        Bnd.bnd_main( "build", "-noeclipse", bnd_filename )
-        begin
-          Bnd.bnd_main( "print", "-verify", filename )
-        rescue => e
-          rm filename
-          raise e
-        end
-      end
+      task = BundleTask.define_task(filename => [Buildr.application.buildfile, dirname])
+      task.project = self
+      # the last task is the task considered the packaging task
+      task
     end
 
     def package_as_bundle_spec(spec)
@@ -74,7 +86,7 @@ module Buildr
       def to_params
         params = @project.manifest.merge(self).reject { |k, v| v.nil? }
         params["-classpath"] ||= ([@project.compile.target] + @project.compile.dependencies).collect(&:to_s).join(", ")
-        params['Bundle-SymbolicName'] ||= [@project.group, @project.name.gsub(':','.')].join('.')
+        params['Bundle-SymbolicName'] ||= [@project.group, @project.name.gsub(':', '.')].join('.')
         params['Bundle-Name'] ||= @project.comment || @project.name
         params['Bundle-Description'] ||= @project.comment
         params['Bundle-Version'] ||= @project.version
