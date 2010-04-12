@@ -30,7 +30,7 @@ module Buildr
 
       # Add Buildr.application.buildfile so it will rebuild if we change settings
       project.file(bnd_filename => [Buildr.application.buildfile, dirname]) do |task|
-        params = project.manifest.merge(project.bnd).reject { |k, v| v.nil? }
+        params = project.bnd.to_params
         params["-output"] = filename
         File.open(task.name, 'w') do |f|
           f.print params.collect { |k, v| "#{k}=#{v}" }.join("\n")
@@ -63,27 +63,26 @@ module Buildr
       Project.local_task("bnd:print")
     end
 
-    after_define do |project|
-      project.bnd.classpath ||= ([project.compile.target] + project.compile.dependencies).collect(&:to_s).join(", ")
-      project.bnd['Bundle-SymbolicName'] ||= [project.group, project.name.gsub(':','.')].join('.')
-      project.bnd['Bundle-Name'] ||= project.comment || project.name
-      project.bnd['Bundle-Description'] ||= project.comment
-      project.bnd['Bundle-Version'] ||= project.version
-      project.bnd['Import-Package'] ||= '*'
-      project.bnd['Export-Package'] ||= '*'
-    end
-
     def bnd
-      @bnd ||= BndParameters.new
+      @bnd ||= BndParameters.new( self )
     end
 
     class BndParameters < Hash
-      def classpath=(classpath)
-        self["-classpath"] = classpath
+      def initialize(project)
+        @project = project
       end
 
-      def classpath
-        self["-classpath"]
+      def to_params
+        params = @project.manifest.merge(self).reject { |k, v| v.nil? }
+        params["-classpath"] ||= ([@project.compile.target] + @project.compile.dependencies).collect(&:to_s).join(", ")
+        params['Bundle-SymbolicName'] ||= [@project.group, @project.name.gsub(':','.')].join('.')
+        params['Bundle-Name'] ||= @project.comment || @project.name
+        params['Bundle-Description'] ||= @project.comment
+        params['Bundle-Version'] ||= @project.version
+        params['Import-Package'] ||= '*'
+        params['Export-Package'] ||= '*'
+
+        params
       end
     end
   end
