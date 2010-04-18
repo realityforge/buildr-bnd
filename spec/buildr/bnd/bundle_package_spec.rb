@@ -1,5 +1,19 @@
 require File.expand_path('../../../spec_helper', __FILE__)
 
+def open_zip_file(file = 'target/foo-2.1.3.jar')
+  jar_filename = @foo._(file)
+  File.should be_exist(jar_filename)
+  Zip::ZipFile.open(jar_filename) do |zip|
+    yield zip
+  end
+end
+
+def open_main_manifest_section(file = 'target/foo-2.1.3.jar')
+  jar_filename = @foo._(file)
+  File.should be_exist(jar_filename)
+  yield Buildr::Packaging::Java::Manifest.from_zip(jar_filename).main
+end
+
 describe "package :bundle" do
   describe "with a valid bundle" do
     before do
@@ -89,20 +103,6 @@ SRC
         attribs['Magic-Food'].should eql('Cheese')
       end
     end
-
-    def open_zip_file(file = 'target/foo-2.1.3.jar')
-      jar_filename = @foo._(file)
-      File.should be_exist(jar_filename)
-      Zip::ZipFile.open(jar_filename) do |zip|
-        yield zip
-      end
-    end
-
-    def open_main_manifest_section(file = 'target/foo-2.1.3.jar')
-      jar_filename = @foo._(file)
-      File.should be_exist(jar_filename)
-      yield Buildr::Packaging::Java::Manifest.from_zip(jar_filename).main
-    end
   end
 
   describe "with an invalid bundle" do
@@ -119,9 +119,59 @@ SRC
       lambda { task('package').invoke }.should raise_error
     end
 
-    it "raise notp produce an invalid jar file" do
+    it "raise not produce an invalid jar file" do
       lambda { task('package').invoke }.should raise_error
       File.should_not be_exist(@foo._("target/foo-2.1.3.jar"))
+    end
+  end
+
+  describe "using classpath_element to specify dependency" do
+    before do
+      @foo = define "foo" do
+        project.version = "2.1.3"
+        project.group = "mygroup"
+        package(:bundle).tap do |bnd|
+          bnd['Export-Package'] = 'org.apache.tools.zip.*'
+          Buildr::Ant.dependencies.each do |d|
+            bnd.classpath_element d
+          end
+        end
+      end
+    end
+
+    it "should not raise an error during packaging" do
+      lambda { task('package').invoke }.should_not raise_error
+    end
+
+    it "should generate package with files exported from dependency" do
+      task('package').invoke
+      open_main_manifest_section do |attribs|
+        attribs['Export-Package'].should eql('org.apache.tools.zip')
+      end
+    end
+  end
+
+  describe "using compile dependencies to specify dependency" do
+    before do
+      @foo = define "foo" do
+        project.version = "2.1.3"
+        project.group = "mygroup"
+        compile.with Buildr::Ant.dependencies
+        package(:bundle).tap do |bnd|
+          bnd['Export-Package'] = 'org.apache.tools.zip.*'
+        end
+      end
+    end
+
+    it "should not raise an error during packaging" do
+      lambda { task('package').invoke }.should_not raise_error
+    end
+
+    it "should generate package with files exported from dependency" do
+      task('package').invoke
+      open_main_manifest_section do |attribs|
+        attribs['Export-Package'].should eql('org.apache.tools.zip')
+      end
     end
   end
 end

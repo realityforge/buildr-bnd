@@ -53,6 +53,33 @@ The extension sets the following bnd parameters;
 * -classpath is set to the compile target directory and any compile time
   dependencies.
 
+== Parameters
+
+=== classpath_element
+
+The user can also specify additional elements that are added to the classpath
+using the 'classpath_element' method. If the parameter to this element is a
+task, artifact, artifact namespace etc. then it will be resolved prior to invoking
+bnd.
+
+  define 'foo' do
+    ...
+    package(:bundle).tap do |bnd|
+      # This dependency will be added to classpath
+      bnd.classpath_element 'someOtherExistingFile.zip'
+      # All of these dependencies will be invoked and added to classpath 
+      bnd.classpath_element artifact('com.sun.messaging.mq:imq:jar:4.4')
+      bnd.classpath_element project('bar') # Adds all the packages
+      bnd.classpath_element 'org.apache.ant:ant:jar:1.8.0'
+      bnd.classpath_element file('myLocalFile.jar')
+      ...
+    end
+
+    project 'bar' do
+      ...
+    end
+  end
+
 == Examples
 
 === Using bnd to wrap an existing jar
@@ -69,10 +96,10 @@ example wraps the OpenMQ JMS provider as an OSGi bundle.
   define 'com.sun.messaging.mq.imq' do
     project.version = '4.4'
     project.group = 'iris'
-    compile.with 'com.sun.messaging.mq:imq:jar:4.4'
     package(:bundle).tap do |bnd|
       bnd['Import-Package'] = "*;resolution:=optional"
       bnd['Export-Package'] = "com.sun.messaging.*;version=#{version}"
+      bnd.classpath_element 'com.sun.messaging.mq:imq:jar:4.4'
     end
   end
 
@@ -124,27 +151,6 @@ parameter withy a local value.
       package(:bundle).tap do |bnd|
         bnd['Bundle-License'] = "http://www.apache.org/licenses/LICENSE-1.1"
       end
-    end
-  end
-
-== Future Work
-
-=== Dependencies
-
-Currently you need to declare all dependencies required by bnd as a compile dependency via
-"compile.with X" even if they are not compile time dependencies but are just included in the
-bundle otherwise these resources may not be uptodate when the bnd tool is invoked. An option
-for improving this situation is something like the following code;
-
-  # Will invoke dependencies before packaging
-  define 'foo' do
-    bnd.dependency artifact('com.sun.messaging.mq:imq:jar:4.4')
-    bnd.dependency project('bar')
-    ...
-    package :bundle
-
-    project 'bar' do
-      ...
     end
   end
 
