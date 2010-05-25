@@ -39,6 +39,11 @@ The user then needs to add the following require into the build file:
 
   require 'buildr_bnd'
 
+If the local maven repository does not contain the required bnd jars they can be downloaded
+but you will need to register the remote repository by adding the following to the build file:
+
+repositories.remote << Buildr::Bnd.remote_repository
+
 == Defaults
 
 The extension sets the following bnd parameters;
