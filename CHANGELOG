@@ -1,4 +1,6 @@
 0.0.3 (Pending)
+* Added: Buildr::Bnd.remote_repository method to get remote repository for bnd dependency.
+* Deprecated: Buildr::Bnd.remote_repositories method that returned an array of repositories for bnd dependency.
 
 0.0.2 (April 17, 2010)
 * Added: Supported classpath_element method on package task
