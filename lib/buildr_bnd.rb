@@ -11,7 +11,13 @@ module Buildr
 
       # Repositories containing the requirements
       def remote_repositories
-        ["http://www.aQute.biz/repo"]
+        puts "Buildr::Bnd.remote_repositories is deprecated. Please use Buildr::Bnd.remote_repository instead." 
+        [remote_repository]
+      end
+
+      # Repositories containing the requirements
+      def remote_repository
+        "http://www.aQute.biz/repo"
       end
 
       def bnd_main(*args)

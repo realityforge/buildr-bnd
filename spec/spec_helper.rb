@@ -26,7 +26,7 @@ unless defined?(SpecHelpers)
   require "#{BUILDR_DIR}/spec/spec_helpers.rb"
 
   # Download deps into real local dir
-  Buildr::Bnd.remote_repositories.each {|repository| Buildr::repositories.remote << repository }
+  Buildr::repositories.remote << Buildr::Bnd.remote_repository
   Buildr::Bnd.requires.each { |spec| artifact(spec).invoke }
 
   # Adjust specs so that they do not attempt to constantly download helper artifacts
