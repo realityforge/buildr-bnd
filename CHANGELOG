@@ -1,4 +1,4 @@
-0.0.4 (Pending)
+0.0.4 (July 5, 2010)
 * Changed: Separated code into separate files, moved project extension code into a separate module and moved
   the code into a hierarchy matching the module hierarchy.
 * Added: Add class containing version information about the plugin.  
