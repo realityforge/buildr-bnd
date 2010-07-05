@@ -1,5 +1,6 @@
 0.0.4 (Pending)
-* Changed: Moved the code implementing the project extension into a hierarchy matching the module hierarchy.
+* Changed: Separated code into separate files, moved project extension code into a separate module and moved
+  the code into a hierarchy matching the module hierarchy.
 * Added: Add class containing version information about the plugin.  
 
 0.0.3 (June 1, 2010)
