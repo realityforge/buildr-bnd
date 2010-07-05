@@ -3,7 +3,7 @@ module Buildr
     class Version
       MAJOR = "0"
       MINOR = "0"
-      MICRO = "4"
+      MICRO = "5"
 
       STRING = "#{MAJOR}.#{MINOR}.#{MICRO}" 
     end
