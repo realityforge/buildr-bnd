@@ -1,6 +1,8 @@
+require File.expand_path(File.dirname(__FILE__) + '/lib/buildr/bnd/version')
+
 Gem::Specification.new do |spec|
   spec.name           = 'buildr-bnd'
-  spec.version        = `git describe`.strip.split('-').first
+  spec.version        = Buildr::Bnd::Version::STRING
   spec.authors        = ['Peter Donald']
   spec.email          = ["peter@realityforge.org"]
   spec.homepage       = "http://github.com/realityforge/buildr-bnd"

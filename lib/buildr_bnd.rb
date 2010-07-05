@@ -1,3 +1,5 @@
+require File.expand_path(File.dirname(__FILE__) + '/buildr/bnd/version')
+
 module Buildr
   module Bnd
     include Buildr::Extension
