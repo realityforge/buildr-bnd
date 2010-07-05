@@ -23,8 +23,8 @@ module Buildr
         task
       end
 
+      # Change the bundle package to .jar extension
       def package_as_bundle_spec(spec)
-        # Change the source distribution to .jar extension
         spec.merge(:type => :jar)
       end
     end
