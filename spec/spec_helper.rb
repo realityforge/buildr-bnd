@@ -30,32 +30,3 @@ require "#{BUILDR_DIR}/spec/spec_helpers.rb"
 # Download deps into real local dir
 Buildr::repositories.remote << Buildr::Bnd.remote_repository
 Buildr::Bnd.requires.each { |spec| artifact(spec).invoke }
-
-# Adjust specs so that they do not attempt to constantly download helper artifacts
-module BuildrBndSpecHelpers
-
-  HELPERS_REPOSITORY = "file://#{Buildr::repositories.local}"
-  LOCAL_TEST_REPOSITORY = File.expand_path File.join(File.dirname(__FILE__), "..", "tmp", "test_m2_repository")
-
-  class << self
-
-    def included(config)
-      config.before(:each) do
-        repositories.remote << "file://#{HELPERS_REPOSITORY}"
-      end
-      config.after(:all) do
-        FileUtils.rm_rf LOCAL_TEST_REPOSITORY
-      end
-    end
-  end
-
-  def createRepository(name)
-    repo = File.join(LOCAL_TEST_REPOSITORY, name)
-    mkpath repo
-    return repo
-  end
-end
-
-Spec::Runner.configure do |config|
-  config.include BuildrBndSpecHelpers
-end
