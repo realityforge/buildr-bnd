@@ -1,4 +1,5 @@
 0.0.5 (Pending)
+* Changed: Stop using absolute paths in requires.
 
 0.0.4 (July 5, 2010)
 * Changed: Separated code into separate files, moved project extension code into a separate module and moved
