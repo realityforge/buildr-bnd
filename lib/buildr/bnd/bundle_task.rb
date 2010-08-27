@@ -12,7 +12,7 @@ module Buildr
       end
 
       def classpath_element(dependencies)
-        artifacts = repositories.artifacts([dependencies])
+        artifacts = Buildr.artifacts([dependencies])
         self.prerequisites << artifacts
         artifacts.each do |dependency|
           @classpath << dependency.to_s
