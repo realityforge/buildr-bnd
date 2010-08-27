@@ -12,7 +12,7 @@ module Buildr
       end
 
       def classpath_element(dependencies)
-        artifacts = self.class.to_artifacts([dependencies])
+        artifacts = repositories.artifacts([dependencies])
         self.prerequisites << artifacts
         artifacts.each do |dependency|
           @classpath << dependency.to_s
@@ -38,30 +38,6 @@ module Buildr
       end
 
       protected
-
-      # Convert objects to artifacts, where applicable
-      def self.to_artifacts(files)
-        files.flatten.inject([]) do |set, file|
-          case file
-            when ArtifactNamespace
-              set |= file.artifacts
-            when Symbol, Hash
-              set |= [Buildr.artifact(file)]
-            when /([^:]+:){2,4}/ # A spec as opposed to a file name.
-              set |= [Buildr.artifact(file)]
-            when Project
-              set |= Buildr.artifacts(file.packages)
-            when Rake::Task
-              set |= [file]
-            when Struct
-              set |= Buildr.artifacts(file.values)
-            else
-              # non-artifacts passed as-is; in particular, String paths are
-              # unmodified since Rake FileTasks don't use absolute paths
-              set |= [file]
-          end
-        end
-      end
 
       def initialize(*args) #:nodoc:
         super
