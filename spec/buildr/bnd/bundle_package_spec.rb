@@ -30,12 +30,15 @@ SRC
         project.group = "mygroup"
         manifest["Magic-Food"] = "Chocolate"
         manifest["Magic-Drink"] = "Wine"
-        package :bundle
+        package(:bundle).tap do |bnd|
+          bnd["Export-Package"] = "*"
+        end
 
         define "bar" do
           project.version = "2.2"
           package(:bundle).tap do |bnd|
             bnd["Magic-Food"] = "Cheese"
+            bnd["Export-Package"] = "*"
           end
         end
       end
@@ -111,7 +114,9 @@ SRC
       @foo = define "foo" do
         project.version = "2.1.3"
         project.group = "mygroup"
-        package :bundle
+        package(:bundle).tap do |bnd|
+          bnd["Export-Package"] = "*"
+        end
       end
     end
 

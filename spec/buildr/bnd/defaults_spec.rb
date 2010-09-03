@@ -25,14 +25,14 @@ describe "project.bnd defaults" do
     @bar.packages[0].to_params['Bundle-SymbolicName'].should eql('mygroup.foo.bar')
   end
 
-  it "defaults Export-Package to *" do
-    @foo.packages[0].to_params['Export-Package'].should eql('*')
-    @bar.packages[0].to_params['Export-Package'].should eql('*')
+  it "defaults Export-Package to nil" do
+    @foo.packages[0].to_params['Export-Package'].should be_nil
+    @bar.packages[0].to_params['Export-Package'].should be_nil
   end
 
-  it "defaults Import-Package to *" do
-    @foo.packages[0].to_params['Import-Package'].should eql('*')
-    @bar.packages[0].to_params['Import-Package'].should eql('*')
+  it "defaults Import-Package to nil" do
+    @foo.packages[0].to_params['Import-Package'].should be_nil
+    @bar.packages[0].to_params['Import-Package'].should be_nil
   end
 
   it "defaults Bundle-Name to project.name if comment not present" do

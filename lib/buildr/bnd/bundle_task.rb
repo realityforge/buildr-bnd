@@ -26,8 +26,6 @@ module Buildr
         params['Bundle-Name'] ||= project.comment || project.name
         params['Bundle-Description'] ||= project.comment
         params['Bundle-Version'] ||= project.version
-        params['Import-Package'] ||= '*'
-        params['Export-Package'] ||= '*'
 
         params
       end

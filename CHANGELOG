@@ -1,4 +1,5 @@
 0.0.5 (Pending)
+* Changed: The extension no longer defaults the bnd parameters "Import-Package" and "Export-Package" to *
 * Changed: Stop using absolute paths in requires.
 
 0.0.4 (July 5, 2010)

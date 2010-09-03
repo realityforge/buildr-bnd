@@ -54,7 +54,6 @@ The extension sets the following bnd parameters;
 * Bundle-Name defaults to the project description if present else the project
   name
 * Bundle-Description defaults to the project description.
-* Import-Package and Export-Package default to *
 * -classpath is set to the compile target directory and any compile time
   dependencies.
 
@@ -143,12 +142,16 @@ parameter withy a local value.
     ...
     define 'fe' do
       ...
-      package :bundle
+      package(:bundle).tap do |bnd|
+        ...
+      end
     end
 
     define 'fi' do
       ...
-      package :bundle
+      package(:bundle).tap do |bnd|
+        ...
+      end
     end
 
     define 'fo' do
