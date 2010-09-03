@@ -48,15 +48,15 @@ repositories.remote << Buildr::Bnd.remote_repository
 
 The extension sets the following bnd parameters;
 
-* Bundle-Version defaults to the project version.
-* Bundle-SymbolicName defaults to the concaternation of the project group
+* <tt>"Bundle-Version"</tt> defaults to the project version.
+* <tt>"Bundle-SymbolicName"</tt> defaults to the concatenation of the project group
   and project id, replacing ':' characters with '.'.
-* Bundle-Name defaults to the project description if present else the project
+* <tt>"Bundle-Name"</tt> defaults to the project description if present else the project
   name
-* Bundle-Description defaults to the project description.
-* -classpath is set to the compile target directory and any compile time
+* <tt>"Bundle-Description"</tt> defaults to the project description.
+* <tt>"-classpath"</tt> is set to the compile target directory and any compile time
   dependencies.
-* Include-Resource defaults to the dir project.resources.target if it exists.
+* <tt>"Include-Resource"</tt> defaults to the dir project.resources.target if it exists.
 
 == Parameters
 
