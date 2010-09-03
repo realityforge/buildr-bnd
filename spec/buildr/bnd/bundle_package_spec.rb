@@ -156,6 +156,38 @@ SRC
     end
   end
 
+  describe "using classpath to specify dependencies" do
+    before do
+      write "src/main/java/com/biz/Foo.java", <<SRC
+package com.biz;
+public class Foo {}
+SRC
+      write "bar/src/main/java/com/biz/bar/Bar.java", <<SRC
+package com.biz.bar;
+public class Bar {}
+SRC
+      @foo = define "foo" do
+        project.version = "2.1.3"
+        project.group = "mygroup"
+        package(:bundle).tap do |bnd|
+          bnd['Export-Package'] = 'org.apache.tools.zip.*'
+          bnd.classpath = bnd.classpath + Buildr::Ant.dependencies
+        end
+      end
+    end
+
+    it "should not raise an error during packaging" do
+      lambda { task('package').invoke }.should_not raise_error
+    end
+
+    it "should generate package with files exported from dependency" do
+      task('package').invoke
+      open_main_manifest_section do |attribs|
+        attribs['Export-Package'].should eql('org.apache.tools.zip')
+      end
+    end
+  end
+
   describe "using compile dependencies to specify dependency" do
     before do
       @foo = define "foo" do

@@ -84,6 +84,30 @@ bnd.
     end
   end
 
+=== classpath
+
+The user can specify the complete classpath using the 'classpath' method. The classpath
+should be an array of elements. If the element is a task, artifact, artifact namespace etc.
+then it will be resolved prior to invoking bnd. 
+
+  define 'foo' do
+    ...
+    package(:bundle).tap do |bnd|
+      bnd.classpath [ project.compile.target,
+                      'someOtherExistingFile.zip',
+                      artifact('com.sun.messaging.mq:imq:jar:4.4'),
+                      project('bar'),
+                      'org.apache.ant:ant:jar:1.8.0',
+                      file('myLocalFile.jar') ]
+      ...
+    end
+
+    project 'bar' do
+      ...
+    end
+  end
+
+
 == Examples
 
 === Using bnd to wrap an existing jar

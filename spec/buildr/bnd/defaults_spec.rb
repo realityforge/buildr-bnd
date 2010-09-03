@@ -36,6 +36,14 @@ SRC
     @bar.packages[0].to_params['-classpath'].should include(@bar.compile.target.to_s)
   end
 
+  it "classpath method returns compile path and dependencies" do
+    @foo.packages[0].classpath.should include(@foo.compile.target)
+    Buildr::Ant.dependencies.each do |dependency|
+      @foo.packages[0].classpath.to_s.should include(Buildr.artifacts(dependency).to_s)
+    end
+    @bar.packages[0].classpath.should include(@bar.compile.target)
+  end
+
   it "defaults Bundle-SymbolicName to combination of group and name" do
     @foo.packages[0].to_params['Bundle-SymbolicName'].should eql('mygroup.foo')
     @bar.packages[0].to_params['Bundle-SymbolicName'].should eql('mygroup.foo.bar')

@@ -2,6 +2,7 @@ module Buildr
   module Bnd
     class BundleTask < Rake::FileTask
       attr_reader :project
+      attr_accessor :classpath
 
       def [](key)
         @params[key]
@@ -15,24 +16,36 @@ module Buildr
         artifacts = Buildr.artifacts([dependencies])
         self.prerequisites << artifacts
         artifacts.each do |dependency|
-          @classpath << dependency.to_s
+          self.classpath << dependency.to_s
         end
       end
 
       def to_params
-        params = project.manifest.merge(@params).reject { |k, v| v.nil? }
-        params["-classpath"] ||= @classpath.collect(&:to_s).join(", ")
-        params['Bundle-SymbolicName'] ||= [project.group, project.name.gsub(':', '.')].join('.')
-        params['Bundle-Name'] ||= project.comment || project.name
-        params['Bundle-Description'] ||= project.comment
-        params['Bundle-Version'] ||= project.version
+        params = self.project.manifest.merge(@params).reject { |k, v| v.nil? }
+        params["-classpath"] ||= self.classpath.collect(&:to_s).join(", ")
+        params['Bundle-SymbolicName'] ||= [self.project.group, self.project.name.gsub(':', '.')].join('.')
+        params['Bundle-Name'] ||= self.project.comment || self.project.name
+        params['Bundle-Description'] ||= self.project.comment
+        params['Bundle-Version'] ||= self.project.version
 
         params
       end
 
       def project=(project)
         @project = project
-        @classpath = [project.compile.target] + project.compile.dependencies
+      end
+
+      def classpath=(classpath)
+        @classpath = []
+        Buildr.artifacts([classpath.flatten.compact]).each do |dependency|
+          self.prerequisites << dependency
+          @classpath << dependency.to_s
+        end
+        @classpath
+      end
+
+      def classpath
+        @classpath ||= ([project.compile.target] + project.compile.dependencies).flatten.compact
       end
 
       protected
