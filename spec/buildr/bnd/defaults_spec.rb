@@ -3,10 +3,20 @@ require File.expand_path('../../../spec_helper', __FILE__)
 describe "project.bnd defaults" do
 
   before do
+    write "src/main/java/com/biz/Foo.java", <<SRC
+package com.biz;
+public class Foo {}
+SRC
+    write "bar/src/main/java/com/biz/bar/Bar.java", <<SRC
+package com.biz.bar;
+public class Bar {}
+SRC
+
     @foo = define "foo" do
       project.version = "2.1.3"
       project.group = "mygroup"
       package :bundle
+      compile.with Buildr::Ant.dependencies
       desc "My Bar Project"
       define "bar" do
         package :bundle
@@ -18,6 +28,12 @@ describe "project.bnd defaults" do
   it "defaults Bundle-Version to project.version" do
     @foo.packages[0].to_params['Bundle-Version'].should eql('2.1.3')
     @bar.packages[0].to_params['Bundle-Version'].should eql('2.1.3')
+  end
+
+  it "defaults -classpath to compile path and dependencies" do
+    @foo.packages[0].to_params['-classpath'].should include(@foo.compile.target.to_s)
+    @foo.packages[0].to_params['-classpath'].should include(Buildr.artifacts(Buildr::Ant.dependencies[0]).to_s)
+    @bar.packages[0].to_params['-classpath'].should include(@bar.compile.target.to_s)
   end
 
   it "defaults Bundle-SymbolicName to combination of group and name" do
