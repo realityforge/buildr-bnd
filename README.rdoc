@@ -111,6 +111,22 @@ then it will be resolved prior to invoking bnd.
 
 == Examples
 
+=== Including non-class resources in a bundle
+
+Bnd can be used to include non-class resources in a bundle. The following
+example includes all resources in 'src/etc' into the bundle.
+
+  require 'buildr_bnd'
+
+  desc 'Including resources example'
+  define 'myproject' do
+    ...
+    package(:bundle).tap do |bnd|
+      bnd['Include-Resource'] = project._('src/etc') + '/'
+      ...
+    end
+  end
+
 === Using bnd to wrap an existing jar
 
 Bnd can be used to wrap an existing jar as an OSGi bundle. The following
