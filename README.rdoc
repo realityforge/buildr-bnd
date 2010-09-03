@@ -203,6 +203,27 @@ parameter withy a local value.
     end
   end
 
+== Future Work
+
+The following is a list of feature requests for future versions of the extension. Feel free to
+jump in and supply a patch if you have gone ahead and implemented the feature.
+
+=== Support Embed-Dependency equivalent
+
+The maven-bundle-plugin supports Embed-Dependency which can include a jar inside the bundle,
+add manifest directives to include it in the export calculations. One "Embed-Dependency"
+directive may turn into something like
+
+  -classpath=com.ibm.mq.jar
+  Include-Resource=com.ibm.mq.jar
+  Bundle-Classpath=.,com.ibm.mq.jar
+  Private-Package=!*
+  -exportcontents: com.ibm.mq.*
+
+For further discussion on this see;
+* http://www.mail-archive.com/users@felix.apache.org/msg06625.html
+* http://www.mail-archive.com/users@felix.apache.org/msg06626.html
+
 == Credit
 
 The plugin was heavily inspired by the bnd tasks originally authored by Rhett Sutphin. It began
