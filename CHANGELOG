@@ -3,6 +3,7 @@
 * Added: The bnd.classpath setting was added.
 * Changed: The extension no longer defaults the bnd parameters "Import-Package" and "Export-Package" to *
 * Changed: Stop using absolute paths in requires.
+* Changed: Renamed main.rb to core.rb.
 
 0.0.4 (July 5, 2010)
 * Changed: Separated code into separate files, moved project extension code into a separate module and moved
