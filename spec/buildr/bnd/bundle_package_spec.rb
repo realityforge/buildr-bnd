@@ -21,6 +21,9 @@ describe "package :bundle" do
 package com.biz;
 public class Foo {}
 SRC
+      write "src/main/resources/IRIS-INF/iris.config", <<SRC
+some=setting
+SRC
       write "bar/src/main/java/com/biz/bar/Bar.java", <<SRC
 package com.biz.bar;
 public class Bar {}
@@ -31,14 +34,14 @@ SRC
         manifest["Magic-Food"] = "Chocolate"
         manifest["Magic-Drink"] = "Wine"
         package(:bundle).tap do |bnd|
-          bnd["Export-Package"] = "*"
+          bnd["Export-Package"] = "com.*"
         end
 
         define "bar" do
           project.version = "2.2"
           package(:bundle).tap do |bnd|
             bnd["Magic-Food"] = "Cheese"
-            bnd["Export-Package"] = "*"
+            bnd["Export-Package"] = "com.*"
           end
         end
       end
@@ -56,6 +59,12 @@ SRC
     it "produces a .jar containing correct .class files for root project" do
       open_zip_file do |zip|
         zip.file.exist?('com/biz/Foo.class').should be_true
+      end
+    end
+
+    it "produces a .jar containing resoruces from resource directory root project" do
+      open_zip_file do |zip|
+        zip.file.exist?('IRIS-INF/iris.config').should be_true
       end
     end
 

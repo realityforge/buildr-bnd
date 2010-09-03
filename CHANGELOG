@@ -1,4 +1,5 @@
 0.0.5 (Pending)
+* Added: The bnd parameter "Include-Resource" defaults to project.resources.target if it exists.
 * Added: The bnd.classpath setting was added.
 * Changed: The extension no longer defaults the bnd parameters "Import-Package" and "Export-Package" to *
 * Changed: Stop using absolute paths in requires.

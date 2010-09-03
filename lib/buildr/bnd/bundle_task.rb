@@ -27,7 +27,10 @@ module Buildr
         params['Bundle-Name'] ||= self.project.comment || self.project.name
         params['Bundle-Description'] ||= self.project.comment
         params['Bundle-Version'] ||= self.project.version
-
+        if params["Include-Resource"].nil? && !project.resources.target.nil?
+          params["Include-Resource"] = "#{project.resources.target}/"
+        end
+        
         params
       end
 
