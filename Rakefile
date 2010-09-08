@@ -22,3 +22,11 @@ Rake::RDocTask.new :rdoc do |rdoc|
 end
 
 Rake::GemPackageTask.new(gem_spec).define
+
+namespace :deploy do
+  desc "Tag release with current version"
+  task :tag do
+    system("git tag -a #{Buildr::Bnd::Version::STRING} -m 'Released #{Buildr::Bnd::Version::STRING}'")
+    puts "Tagged locally.  `git push --tags` if you're sure."
+  end
+end
