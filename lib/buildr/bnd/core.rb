@@ -18,7 +18,7 @@ module Buildr
       end
 
       def bnd_main(*args)
-        cp = Buildr.artifacts(self.requires).each(&:invoke).map(&:to_s).join(File::PATH_SEPARATOR)
+        cp = Buildr.artifacts(self.requires).each(&:invoke).map(&:to_s)
         Java::Commands.java 'aQute.bnd.main.bnd', *(args + [{ :classpath => cp }])
       end
     end
