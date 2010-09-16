@@ -2,6 +2,16 @@ require 'rake'
 require 'rake/rdoctask'
 require 'rake/gempackagetask'
 require 'spec/rake/spectask'
+require File.expand_path("../lib/buildr/bnd/version", __FILE__)
+
+begin
+  require 'rubygems'
+  gem 'ci_reporter'
+  require 'ci/reporter/rake/rspec'
+  ENV["CI_REPORTS"] = 'tmp/reports'
+rescue LoadError => e
+  #puts "The ci_reporter gem is not available. Reports will not be generated."
+end
 
 gem_spec = Gem::Specification.load(File.expand_path('buildr-bnd.gemspec', File.dirname(__FILE__)))
 
