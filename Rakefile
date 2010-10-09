@@ -36,7 +36,7 @@ Rake::GemPackageTask.new(gem_spec).define
 namespace :deploy do
   desc "Tag release with current version"
   task :tag do
-    system("git tag -a #{Buildr::Bnd::Version::STRING} -m 'Released #{Buildr::Bnd::Version::STRING}'")
+    system("git tag -a #{gem_spec.version} -m 'Released #{gem_spec.version}'")
     puts "Tagged locally.  `git push --tags` if you're sure."
   end
 end
