@@ -71,4 +71,8 @@ SRC
     @foo.packages[0].to_params['Bundle-Description'].should be_nil
     @bar.packages[0].to_params['Bundle-Description'].should eql('My Bar Project')
   end
+
+  it "defaults -removeheaders to" do
+    @foo.packages[0].to_params['-removeheaders'].should eql("Include-Resource,Bnd-LastModified,Created-By,Implementation-Title,Tool")
+  end
 end

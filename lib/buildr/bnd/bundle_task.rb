@@ -30,6 +30,7 @@ module Buildr
         if params["Include-Resource"].nil? && !project.resources.target.nil?
           params["Include-Resource"] = "#{project.resources.target}/"
         end
+        params['-removeheaders'] ||= "Include-Resource,Bnd-LastModified,Created-By,Implementation-Title,Tool"
         
         params
       end

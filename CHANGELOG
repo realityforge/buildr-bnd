@@ -1,4 +1,6 @@
 0.0.6 (Pending)
+* Added: The bnd directive "-removeheaders" defaults to "Include-Resource,Bnd-LastModified,Created-By,Implementation-Title,Tool".
+  This removes several *uninteresting* manifest headers.
 
 0.0.5 (September 8, 2010)
 * Added: The bnd parameter "Include-Resource" defaults to project.resources.target if it exists.

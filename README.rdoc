@@ -208,13 +208,6 @@ parameter withy a local value.
 The following is a list of feature requests for future versions of the extension. Feel free to
 jump in and supply a patch if you have gone ahead and implemented the feature.
 
-=== Remove certain headers from generated manifest
-
-By default we should be removing headers that are not relevant in the OSGi world or only there for
-the build process. i.e. We could consider defaulting the headers removed to;
-
-  bnd['-removeheaders'] = "Include-Resource,Bnd-LastModified,Created-By,Implementation-Title,Tool"
-
 === Support Embed-Dependency equivalent
 
 The maven-bundle-plugin supports Embed-Dependency which can include a jar inside the bundle,
