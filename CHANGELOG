@@ -1,4 +1,4 @@
-0.0.6 (Pending)
+0.0.6 (October 12, 2010)
 * Added: The bnd directive "-removeheaders" defaults to "Include-Resource,Bnd-LastModified,Created-By,Implementation-Title,Tool".
   This removes several *uninteresting* manifest headers.
 
