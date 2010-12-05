@@ -1,6 +1,6 @@
 = Warning
 
-Buildr-bnd has been integrated into Buildr 1.4.5 and will be deprecated 
+Buildr-bnd has been integrated into buildr 1.4.5 and will be deprecated 
 once the 1.4.5 version of buildr is released.
 
 = buildr-bnd
